@@ -1,4 +1,12 @@
-alphaDivSubsample<-function(ps,richness_measure,evenness_measure,trials){
+alphaDivSubsample<-function(ps,richness_measure="Observed",evenness_measure="InvSimpson",trials=100){
+  #function implementing alpha diversity subsamped with replacement as described here:
+  #http://deneflab.github.io/MicrobeMiseq/demos/mothur_2_phyloseq.html#alpha_diversity
+  #usage: ps = phyloseq object
+  #richness_measure default is observed
+  #evenness_measure default is inverse Simpson
+  #available metrics from phyloseq see ?esimate_richness
+  #n trials default=100
+  library(phyloseq)
   min_lib<-min(sample_sums(ps))
   nsamp = nsamples(ps)
   trials = trials
