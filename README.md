@@ -14,5 +14,5 @@ Requries the following R packages (and loads them):
 
 This script takes a phyloseq object, determines if each of the slots (otu_table, tax_table, sam_data, phy_tree, refseqs) are present, and if so, writes them to a format that is importable by qiime2.
 
-## alphaDivSubsample
+## AlphaDiversityFunction (function is alphaDivSubsample())
 Takes a phyloseq object and performs richness and eveness calculations using subsampling as described [here](http://deneflab.github.io/MicrobeMiseq/demos/mothur_2_phyloseq.html#alpha_diversity).
