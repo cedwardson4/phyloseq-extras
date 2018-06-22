@@ -1,5 +1,5 @@
 phyloseq2qiime2<-function(physeq){
-  #take a phyloseq object, separate into individual parts, add "Other" OTU row in tax_table, otu_table)
+  #take a phyloseq object,check for individual parts, write to files ready for qiime2 upload
   library(phyloseq)
   library(dada2)
   library(biomformat)
@@ -10,7 +10,7 @@ phyloseq2qiime2<-function(physeq){
   }
   ps_name <-deparse(substitute(physeq))
   taxa_are_rows_logical<-taxa_are_rows(physeq)
-  
+  #write OTU table to biom file
   if(is.null(access(physeq,"otu_table"))==FALSE){
     if(taxa_are_rows_logical==TRUE) {
       otu<-as(otu_table(physeq),"matrix")
@@ -24,11 +24,13 @@ phyloseq2qiime2<-function(physeq){
       print(paste0("Writing feature table to ",ps_name,"_feature-table.biom"))
     }
   }
+  #write sample data (metadata) to tsv
   if(is.null(access(physeq,"sam_data"))==FALSE){
     write.table(sample_data(physeq),file=paste0(ps_name,"_sample-metadata.txt"), 
                 sep="\t", row.names=FALSE, col.names=TRUE, quote=FALSE)
     print(paste0("Writing sample metadata to ",ps_name,"_sample-metadata.txt"))
   }
+  #write taxonomy table to qiime2 formatted taxonomy
   if(is.null(access(physeq,"tax_table"))==FALSE){
     tax<-as(tax_table(physeq),"matrix")
     tax_cols <- colnames(tax)
@@ -38,6 +40,7 @@ phyloseq2qiime2<-function(physeq){
     write.table(tax, file=paste0(ps_name,"_tax.txt"), quote=FALSE, col.names=FALSE, sep="\t")
     print(paste0("Writing taxonomy table to ",ps_name,"_tax.txt"))
   }
+  #write phylogenetic tree to newick formwat
   if(is.null(access(physeq,"phy_tree"))==FALSE){
     if(is.rooted(phy_tree(physeq))==TRUE) {
       ape::write.tree(phy_tree(physeq),file=paste0(ps_name,"_tree-rooted.newick"))
@@ -47,6 +50,7 @@ phyloseq2qiime2<-function(physeq){
       print(paste0("Writing unrooted tree to ",ps_name,"_tree-unrooted.newick"))
     }      
   }
+  #write reference sequences to fasta format
   if(is.null(access(physeq,"refseq"))==FALSE){
     writeXStringSet(refseq(physeq),filepath=paste0(ps_name,"_ref-seqs.fasta"))
     print(paste0("Writing reference sequences to FASTA file ",ps_name,"_ref-seqs.fasta"))
