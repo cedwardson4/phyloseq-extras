@@ -1,7 +1,6 @@
 phyloseq2qiime2<-function(physeq){
   #take a phyloseq object,check for individual parts, write to files ready for qiime2 upload
   library(phyloseq)
-  library(dada2)
   library(biomformat)
   library(ape)
   library(Biostrings)
