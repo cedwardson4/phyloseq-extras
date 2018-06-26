@@ -49,9 +49,15 @@ phyloseq2qiime2<-function(physeq){
       print(paste0("Writing unrooted tree to ",ps_name,"_tree-unrooted.newick"))
     }      
   }
-  #write reference sequences to fasta format
+  #write representative sequences to fasta format
   if(is.null(access(physeq,"refseq"))==FALSE){
     writeXStringSet(refseq(physeq),filepath=paste0(ps_name,"_ref-seqs.fasta"))
     print(paste0("Writing reference sequences to FASTA file ",ps_name,"_ref-seqs.fasta"))
-  } 
+  } else if (taxa_are_rows_logical==FALSE && unique(grepl("[^ATCG]",colnames(otu_table(physeq)),ignore.case=TRUE) == FALSE)) {
+    uniquesToFasta(t(otu), fout=paste0(ps_name,"_ref-seqs.fasta"), ids=rownames(otu))
+    print(paste0("Writing reference sequences to FASTA file ",ps_name,"_ref-seqs.fasta"))      
+  } else if (taxa_are_rows_logical==TRUE && unique(grepl("[^ATCG]",rownames(otu_table(physeq)),ignore.case=TRUE) == FALSE)) {
+    uniquesToFasta(otu, fout=paste0(ps_name,"_ref-seqs.fasta"), ids=rownames(otu))
+    print(paste0("Writing reference sequences to FASTA file ",ps_name,"_ref-seqs.fasta"))    
+  }
 }
