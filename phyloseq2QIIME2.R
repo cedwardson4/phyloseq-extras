@@ -4,6 +4,7 @@ phyloseq2qiime2<-function(physeq){
   library(biomformat)
   library(ape)
   library(Biostrings)
+  library(dada2)
   if(packageVersion("biomformat") < "1.7") {
     stop("This will only work with biomformat version > 1.7")
   }
